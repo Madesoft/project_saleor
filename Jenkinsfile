@@ -36,7 +36,7 @@ pipeline {
     }
      stage('Test environment') {
             steps {
-                sh '''cd /root/projects
+                sh '''cd /
                     '''
             }
         }
