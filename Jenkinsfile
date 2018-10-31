@@ -36,10 +36,7 @@ pipeline {
     }
      stage('Test environment') {
             steps {
-                sh '''source /root/projects/environments/project_saleor_env/bin/activate 
-                      pip list
-                      which pip
-                      which python
+                sh '''cd /root/projects
                     '''
             }
         }
