@@ -34,5 +34,14 @@ pipeline {
         echo 'Sólo se ejecuta en ramas de desarrolladores'
       }
     }
+     stage('Test environment') {
+            steps {
+                sh '''source /root/projects/environments/project_saleor_env/bin/activate 
+                      pip list
+                      which pip
+                      which python
+                    '''
+            }
+        }
   }
 }
