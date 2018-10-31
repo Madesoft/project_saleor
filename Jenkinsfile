@@ -36,7 +36,9 @@ pipeline {
     }
      stage('Test environment') {
             steps {
-                sh '''cd /
+                sh '''cd /home/jenkins/development/environments
+                      python3 -m venv project_saleor_env
+                      source project_saleor_env/bin/activate
                     '''
             }
         }
