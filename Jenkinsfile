@@ -36,8 +36,16 @@ pipeline {
     }
      stage('Test environment') {
             steps {
-                sh '''su jenkins
+                sh '''#!/bin/bash
+                      # This is a comment!
+                      echo Hello World # This is a comment
                       source /home/jenkins/development/environments/project_saleor_env/bin/activate
+                      pip install -r requirements.txt
+                      export SECRET_KEY='saleor'
+                      python manage.py migrate
+                      npm install
+                      npm run build-assets
+                      npm run build-emails
                     '''
             }
         }
