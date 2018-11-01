@@ -1,2 +1,4 @@
 django-silk==2.0.0
 radon==2.4.0
+coverage==4.5.1
+pytest-cov==2.6.0
