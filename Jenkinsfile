@@ -34,20 +34,48 @@ pipeline {
         echo 'Sólo se ejecuta en ramas de desarrolladores'
       }
     }
-     stage('Test environment') {
-            steps {
-                sh '''#!/bin/bash
-                      # This is a comment!
-                      echo Hello World # This is a comment
-                      source /home/jenkins/development/environments/project_saleor_env/bin/activate
-                      pip install -r requirements.txt
-                      export SECRET_KEY='saleor'
-                      python manage.py migrate
-                      npm install
-                      npm run build-assets
-                      npm run build-emails
-                    '''
+    stage('Update environment') {
+        steps {
+            sh '''source /home/jenkins/development/environments/project_saleor_env/bin/activate
+                  pip install -r requirements.txt
+                  pip install -r requirements_dev.txt
+                  export SECRET_KEY='saleor'
+                  python manage.py migrate
+                '''
+        }
+    }
+    stage('Static code metrics') {
+        steps {
+            sh '''source /home/jenkins/development/environments/project_saleor_env/bin/activate
+                  radon raw --json saleor/ > /home/jenkins/development/reports/raw_report.json
+                  radon cc --json saleor/ > /home/jenkins/development/reports/cc_report.json
+                  radon mi --json saleor/ > /home/jenkins/development/reports/mi_report.json
+                '''
+        }
+    }
+    stage('Static code metrics') {
+        steps {
+            sh '''source /home/jenkins/development/environments/project_saleor_env/bin/activate
+                  pytest --cov-report html:/home/jenkins/development/reports/cov_html
+                         --cov-report xml:/home/jenkins/development/reports/cov.xml 
+                         --cov=saleor test_ma0.py
+                '''
+        }
+        post{
+            always{
+                step([$class: 'CoberturaPublisher',
+                               autoUpdateHealth: false,
+                               autoUpdateStability: false,
+                               coberturaReportFile: '/home/jenkins/development/reports/cov.xml ',
+                               failNoReports: false,
+                               failUnhealthy: false,
+                               failUnstable: false,
+                               maxNumberOfBuilds: 10,
+                               onlyStable: false,
+                               sourceEncoding: 'ASCII',
+                               zoomCoverageChart: false])
             }
         }
+    }
   }
 }
