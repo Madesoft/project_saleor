@@ -66,7 +66,7 @@ pipeline {
                 step([$class: 'CoberturaPublisher',
                                autoUpdateHealth: false,
                                autoUpdateStability: false,
-                               coberturaReportFile: '/home/jenkins/development/reports/cov.xml ',
+                               coberturaReportFile: '/home/jenkins/development/reports/cov.xml',
                                failNoReports: false,
                                failUnhealthy: false,
                                failUnstable: false,
