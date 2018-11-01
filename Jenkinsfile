@@ -47,17 +47,17 @@ pipeline {
     stage('Static code metrics') {
         steps {
             sh '''source /home/jenkins/development/environments/project_saleor_env/bin/activate
-                  radon raw --json saleor/ > /home/jenkins/development/reports/raw_report.json
-                  radon cc --json saleor/ > /home/jenkins/development/reports/cc_report.json
-                  radon mi --json saleor/ > /home/jenkins/development/reports/mi_report.json
+                  radon raw --json saleor/ > reports/raw_report.json
+                  radon cc --json saleor/ > reports/cc_report.json
+                  radon mi --json saleor/ > reports/mi_report.json
                 '''
         }
     }
     stage('Python unit tests') {
         steps {
             sh '''source /home/jenkins/development/environments/project_saleor_env/bin/activate
-                  pytest --cov-report html:/home/jenkins/development/reports/cov_html
-                         --cov-report xml:/home/jenkins/development/reports/cov.xml 
+                  pytest --cov-report html:./reports/cov_html
+                         --cov-report xml:./reports/cov.xml 
                          --cov=saleor test_ma0.py
                 '''
         }
@@ -66,7 +66,7 @@ pipeline {
                 step([$class: 'CoberturaPublisher',
                                autoUpdateHealth: false,
                                autoUpdateStability: false,
-                               coberturaReportFile: '/home/jenkins/development/reports/cov.xml',
+                               coberturaReportFile: 'reports/cov.xml',
                                failNoReports: false,
                                failUnhealthy: false,
                                failUnstable: false,
