@@ -53,7 +53,7 @@ pipeline {
                 '''
         }
     }
-    stage('Static code metrics') {
+    stage('Python unit tests') {
         steps {
             sh '''source /home/jenkins/development/environments/project_saleor_env/bin/activate
                   pytest --cov-report html:/home/jenkins/development/reports/cov_html
