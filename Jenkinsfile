@@ -55,11 +55,11 @@ pipeline {
     }
     stage('Python unit tests') {
         steps {
+          
+            //pytest --cov-report html:./reports/cov_html --cov-report xml:./reports/cov.xml --cov=saleor --junitxml=./reports/results.xml test_ma0.py tests/test_translation.py  tests/test_account.py tests/test_collection.py
             sh '''source /home/jenkins/development/environments/project_saleor_env/bin/activate
-                  pytest --cov-report html:./reports/cov_html
-                         --cov-report xml:./reports/cov.xml
-                         --cov=saleor test_ma0.py
-                '''
+                  pytest --cov-report html:./reports/cov_html --cov-report xml:./reports/cov.xml --cov=saleor --junitxml=./reports/results.xml test_ma0.py
+                  '''
         }
         post{
             always{
@@ -74,6 +74,8 @@ pipeline {
                                onlyStable: false,
                                sourceEncoding: 'ASCII',
                                zoomCoverageChart: false])
+              // Archive unit tests for the future
+              junit allowEmptyResults: true, testResults: 'reports/results.xml'
             }
         }
     }
