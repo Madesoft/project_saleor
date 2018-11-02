@@ -73,7 +73,7 @@ pipeline {
                                sourceEncoding: 'ASCII',
                                zoomCoverageChart: false])
               // Archive unit tests for the future
-              junit allowEmptyResults: true, testResults: 'reports/results.xml', fingerprint: true
+              junit allowEmptyResults: true, testResults: 'reports/results.xml'
             }
         }
     }
