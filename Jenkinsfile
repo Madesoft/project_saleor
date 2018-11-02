@@ -23,7 +23,7 @@ pipeline {
           sh 'git pull . origin/' + "${env.BRANCH_NAME}" + ' --allow-unrelated-histories'
           sh 'git merge origin/' + "${env.BRANCH_NAME}"
           sh 'git push origin HEAD:master'
-          echo 'Proceso finalizado exitosamente'
+          echo 'Proceso de integración continua culminado exitosamente'
         }
       }
     }
@@ -57,7 +57,7 @@ pipeline {
         steps {
             sh '''source /home/jenkins/development/environments/project_saleor_env/bin/activate
                   pytest --cov-report html:./reports/cov_html
-                         --cov-report xml:./reports/cov.xml 
+                         --cov-report xml:./reports/cov.xml
                          --cov=saleor test_ma0.py
                 '''
         }
