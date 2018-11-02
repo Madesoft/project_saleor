@@ -56,9 +56,7 @@ pipeline {
     stage('Python unit tests') {
         steps {
             sh '''source /home/jenkins/development/environments/project_saleor_env/bin/activate
-                  pytest --cov-report html:./reports/cov_html
-                         --cov-report xml:./reports/cov.xml
-                         --cov=saleor test_ma0.py
+                  pytest --cov-report html:./reports/cov_html --cov-report xml:./reports/cov.xml --cov=saleor test_ma0.py
                 '''
         }
         post{
