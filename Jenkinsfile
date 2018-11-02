@@ -23,7 +23,7 @@ pipeline {
           sh 'git pull . origin/' + "${env.BRANCH_NAME}" + ' --allow-unrelated-histories'
           sh 'git merge origin/' + "${env.BRANCH_NAME}"
           sh 'git push origin HEAD:master'
-          echo 'Proceso de integración continua culminado exitosamente'
+          echo 'Proceso de integración continua terminado exitosamente'
         }
       }
     }
