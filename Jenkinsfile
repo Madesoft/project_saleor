@@ -84,5 +84,8 @@ pipeline {
     always {
       echo 'Finalizando proceso'
     }
+    failure {
+      echo 'Proceso ' + ${env.JOB_NAME} + ' presentó errores'
+    }
   }
 }
