@@ -80,4 +80,9 @@ pipeline {
         }
     }
   }
+  post {
+    always {
+      echo 'Finalizando proceso'
+    }
+  }
 }
