@@ -85,10 +85,10 @@ pipeline {
       echo 'Finalizando proceso'
     }
     success {
-      echo 'Proceso ${env.BUILD_NUMBER} en ${env.JOB_NAME} ha terminado exitosamente'
+      echo 'Proceso ' + '${env.BUILD_NUMBER}' + ' en ' + '${env.JOB_NAME}' + ' ha terminado exitosamente'
     }
     failure {
-      echo 'Proceso ${env.BUILD_NUMBER} en ${env.JOB_NAME} presentó errores'
+      echo 'Proceso ' + '${env.BUILD_NUMBER}' + ' en ' + '${env.JOB_NAME}' + ' presentó errores'
     }
   }
 }
