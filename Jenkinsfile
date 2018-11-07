@@ -85,7 +85,7 @@ pipeline {
       echo 'Finalizando proceso'
     }
     failure {
-      echo 'Proceso ' + "${env.JOB_NAME}" + ' presentó errores'
+      echo 'Proceso ${env.BUILD_NUMBER} en ${env.JOB_NAME} presentó errores'
     }
   }
 }
