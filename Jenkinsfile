@@ -83,13 +83,15 @@ pipeline {
       steps {
         echo 'Comenzando etapa de despliegue'
         echo 'Preparando copia de seguridad'
-        def remote = [:]
-        remote.name = 'test'
-        remote.host = 'test.domain.com'
-        remote.user = 'root'
-        remote.password = 'password'
-        remote.allowAnyHosts = true
-        sshCommand remote: remote, command: "cp -r /home/saleor-produccion/dist /home/temp_deploy/"
+        node {
+          def remote = [:]
+          remote.name = ''
+          remote.host = '45.58.47.237'
+          remote.user = 'root'
+          remote.password = 'madesoft'
+          remote.allowAnyHosts = true
+          sshCommand remote: remote, command: "cp -r /home/saleor-produccion/dist /home/temp_deploy/"
+        }
         echo 'Copia de seguridad terminada'
         echo 'Preparando archivos para despliegue'
         sshPublisher(publishers: [sshPublisherDesc(configName: 'Deploy', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'echo "despliegue de archivos terminado"', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '**/*')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
