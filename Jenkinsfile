@@ -79,6 +79,15 @@ pipeline {
             }
         }
     }
+    stage ('Paso 4: Despliegue') {
+      steps {
+        echo 'iniciando despliegue'
+        sh 'ssh user@server rm -rf /home/temp_deploy/'
+        sh 'ssh user@server mkdir -p /home/temp_deploy'
+        sh 'scp -r dist user@server:/home/temp_deploy/dist/'
+        sh 'ssh user@server "rm -rf /home/saleor-produccion/dist/ && mv /home/temp_deploy/dist/ /home/saleor-produccion/dist/"'
+      }
+    }
   }
   post {
     always {
