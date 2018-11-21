@@ -82,7 +82,18 @@ pipeline {
     stage ('Paso 4: Despliegue') {
       steps {
         echo 'Comenzando etapa de despliegue'
-        sshPublisher(publishers: [sshPublisherDesc(configName: 'Deploy', transfers: [sshTransfer(cleanRemote: false, excludes: '**/*', execCommand: 'echo "preparando copia de seguridad" && cp -r /home/saleor-produccion/dist /home/temp_deploy/ && echo "copia de seguridad terminada" && echo "preparando despliegue de archivos"', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: ''), sshTransfer(cleanRemote: false, excludes: '', execCommand: 'echo "despliegue de archivos finalizado exitosamente"', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '**/*')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+        echo 'Preparando copia de seguridad'
+        def remote = [:]
+        remote.name = 'test'
+        remote.host = 'test.domain.com'
+        remote.user = 'root'
+        remote.password = 'password'
+        remote.allowAnyHosts = true
+        sshCommand remote: remote, command: "cp -r /home/saleor-produccion/dist /home/temp_deploy/"
+        echo 'Copia de seguridad terminada'
+        echo 'Preparando archivos para despliegue'
+        sshPublisher(publishers: [sshPublisherDesc(configName: 'Deploy', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'echo "despliegue de archivos terminado"', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '**/*')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+        echo 'Fase de despliegue terminada'
       }
     }
   }
