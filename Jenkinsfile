@@ -81,11 +81,7 @@ pipeline {
     }*/
     stage ('Paso 4: Despliegue') {
       steps {
-        echo 'iniciando despliegue - ssh verificado en configuración'
-        sh 'ssh root@45.58.47.237 rm -rf /home/temp_deploy/'
-        sh 'ssh root@45.58.47.237 mkdir -p /home/temp_deploy'
-        sh 'scp -r dist root@45.58.47.237:/home/temp_deploy/dist/'
-        sh 'ssh root@45.58.47.237 "rm -rf /home/saleor-produccion/dist/ && mv /home/temp_deploy/dist/ /home/saleor-produccion/dist/"'
+        sshPublisher(publishers: [sshPublisherDesc(configName: 'Deploy', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'cp -r /home/saleor-produccion/dist /home/temp_deploy/', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/home/saleor-produccion/dist/', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '**/*')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
       }
     }
   }
