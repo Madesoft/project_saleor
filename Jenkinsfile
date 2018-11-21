@@ -81,7 +81,7 @@ pipeline {
     }*/
     stage ('Paso 4: Despliegue') {
       steps {
-        echo 'iniciando despliegue'
+        echo 'iniciando despliegue - ssh verificado en configuración'
         sh 'ssh root@45.58.47.237 rm -rf /home/temp_deploy/'
         sh 'ssh root@45.58.47.237 mkdir -p /home/temp_deploy'
         sh 'scp -r dist root@45.58.47.237:/home/temp_deploy/dist/'
