@@ -80,17 +80,24 @@ pipeline {
         }
     }
   }
+  stage ('Paso 4: Despliegue') {
+    sh 'ssh user@server rm -rf /home/temp_deploy/'
+    sh 'ssh user@server mkdir -p /home/temp_deploy'
+    sh 'scp -r dist user@server:/home/temp_deploy/dist/'
+    sh 'ssh user@server "rm -rf /home/saleor-produccion/dist/ && mv /home/temp_deploy/dist/ /home/saleor-produccion/dist/"'
+
+  }
   post {
     always {
       echo 'Finalizando proceso'
     }
     success {
       echo 'Proceso ' + "${env.BUILD_NUMBER}" + ' en ' + "${env.JOB_NAME}" + ' ha terminado exitosamente'
-      mail bcc: '', body: "<b>Integración en código exitosa</b><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL de build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: 'madesoft.2.2018@gmail.com', mimeType: 'text/html', replyTo: '', subject: "SUCCESS CI: Project name -> ${env.JOB_NAME}", to: "anderson.enriquez@correounivalle.edu.co, william.valdes@correounivalle.edu.co";
+      mail bcc: '', body: "<b>Integración en código exitosa</b><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL de build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: 'madesoft.2.2018@gmail.com', mimeType: 'text/html', replyTo: '', subject: "SUCCESS CI: Project name -> ${env.JOB_NAME}", to: "anderson.enriquez@correounivalle.edu.co";
     }
     failure {
       echo 'Proceso ' + "${env.BUILD_NUMBER}" + ' en ' + "${env.JOB_NAME}" + ' presentó errores'
-      mail bcc: '', body: "<b>Se presentó error en la integración del código</b><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL de build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: 'madesoft.2.2018@gmail.com', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> ${env.JOB_NAME}", to: "anderson.enriquez@correounivalle.edu.co, william.valdes@correounivalle.edu.co";
+      mail bcc: '', body: "<b>Se presentó error en la integración del código</b><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL de build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: 'madesoft.2.2018@gmail.com', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> ${env.JOB_NAME}", to: "anderson.enriquez@correounivalle.edu.co";
     }
   }
 }
