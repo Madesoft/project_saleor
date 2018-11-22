@@ -53,7 +53,7 @@ pipeline {
                 '''
         }
     }
-    /*stage('Python unit tests') {
+    stage('Python unit tests') {
         steps {
             echo 'python unit tests'
             //pytest --cov-report html:./reports/cov_html --cov-report xml:./reports/cov.xml --cov=saleor --junitxml=./reports/results.xml test_ma0.py tests/test_translation.py  tests/test_account.py tests/test_collection.py
@@ -78,7 +78,7 @@ pipeline {
               junit allowEmptyResults: true, testResults: 'reports/results.xml'
             }
         }
-    }*/
+    }
     stage ('Paso 4: Despliegue') {
       when {branch 'master'}
       steps {
