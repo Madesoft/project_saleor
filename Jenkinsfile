@@ -25,7 +25,7 @@ pipeline {
         echo 'Se ha recibido integración exitosa'
       }
     }
-    stage('Paso 4: Pruebas') {
+    stage('Paso 4: Pruebas e integración') {
       when { not { branch 'master' } }
       steps {
         echo "update environment"
@@ -46,40 +46,35 @@ pipeline {
         sh '''source /home/jenkins/development/environments/project_saleor_env/bin/activate
               pytest --cov-report html:./reports/cov_html --cov-report xml:./reports/cov.xml --cov=saleor --junitxml=./reports/results.xml test_ma0.py
               '''
-        post {
-          always{
-              step([$class: 'CoberturaPublisher',
-                             autoUpdateHealth: false,
-                             autoUpdateStability: false,
-                             coberturaReportFile: 'reports/cov.xml',
-                             failNoReports: false,
-                             failUnhealthy: false,
-                             failUnstable: false,
-                             maxNumberOfBuilds: 10,
-                             onlyStable: false,
-                             sourceEncoding: 'ASCII',
-                             zoomCoverageChart: false])
-            // Archive unit tests for the future
-            junit allowEmptyResults: true, testResults: 'reports/results.xml'
-          }
-          success {
-            echo "Las pruebas se han ejecutado correctamente y han sido exitosas"
-          }
-        }
       }
-    }
-    stage ('Paso 5: Integración') {
-      when { not { branch 'master' } }
-      steps {
-        echo "Preparando actualización a rama master"
-        withCredentials([sshUserPrivateKey(credentialsId: '20f8159b-d214-48c3-9f07-4ae2aa3af5a9', keyFileVariable: '', passphraseVariable: '', usernameVariable: '')]) {
-          sh 'git remote set-url origin https://Madesoft:Madesoft2018*@github.com/Madesoft/project_saleor.git'
-          sh 'git fetch origin'
-          sh 'git checkout origin/master'
-          sh 'git pull . origin/' + "${env.BRANCH_NAME}" + ' --allow-unrelated-histories'
-          sh 'git merge origin/' + "${env.BRANCH_NAME}"
-          sh 'git push origin HEAD:master'
-          echo 'Se ha integrado a la rama master exitosamente'
+      post {
+        always{
+            step([$class: 'CoberturaPublisher',
+                           autoUpdateHealth: false,
+                           autoUpdateStability: false,
+                           coberturaReportFile: 'reports/cov.xml',
+                           failNoReports: false,
+                           failUnhealthy: false,
+                           failUnstable: false,
+                           maxNumberOfBuilds: 10,
+                           onlyStable: false,
+                           sourceEncoding: 'ASCII',
+                           zoomCoverageChart: false])
+          // Archive unit tests for the future
+          junit allowEmptyResults: true, testResults: 'reports/results.xml'
+        }
+        success {
+          echo "Las pruebas se han ejecutado correctamente y han sido exitosas"
+          echo "Preparando actualización a rama master"
+          withCredentials([sshUserPrivateKey(credentialsId: '20f8159b-d214-48c3-9f07-4ae2aa3af5a9', keyFileVariable: '', passphraseVariable: '', usernameVariable: '')]) {
+            sh 'git remote set-url origin https://Madesoft:Madesoft2018*@github.com/Madesoft/project_saleor.git'
+            sh 'git fetch origin'
+            sh 'git checkout origin/master'
+            sh 'git pull . origin/' + "${env.BRANCH_NAME}" + ' --allow-unrelated-histories'
+            sh 'git merge origin/' + "${env.BRANCH_NAME}"
+            sh 'git push origin HEAD:master'
+            echo 'Se ha integrado a la rama master exitosamente'
+          }
         }
       }
     }
