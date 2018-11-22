@@ -64,17 +64,23 @@ pipeline {
           }
           success {
             echo "Las pruebas se han ejecutado correctamente y han sido exitosas"
-            echo "Preparando actualización a rama master"
-            withCredentials([sshUserPrivateKey(credentialsId: '20f8159b-d214-48c3-9f07-4ae2aa3af5a9', keyFileVariable: '', passphraseVariable: '', usernameVariable: '')]) {
-              sh 'git remote set-url origin https://Madesoft:Madesoft2018*@github.com/Madesoft/project_saleor.git'
-              sh 'git fetch origin'
-              sh 'git checkout origin/master'
-              sh 'git pull . origin/' + "${env.BRANCH_NAME}" + ' --allow-unrelated-histories'
-              sh 'git merge origin/' + "${env.BRANCH_NAME}"
-              sh 'git push origin HEAD:master'
-              echo 'Se ha integrado a la rama master exitosamente'
             }
           }
+        }
+      }
+    }
+    stage ('Paso 5: Integración') {
+      when { not { branch 'master' } }
+      steps {
+        echo "Preparando actualización a rama master"
+        withCredentials([sshUserPrivateKey(credentialsId: '20f8159b-d214-48c3-9f07-4ae2aa3af5a9', keyFileVariable: '', passphraseVariable: '', usernameVariable: '')]) {
+          sh 'git remote set-url origin https://Madesoft:Madesoft2018*@github.com/Madesoft/project_saleor.git'
+          sh 'git fetch origin'
+          sh 'git checkout origin/master'
+          sh 'git pull . origin/' + "${env.BRANCH_NAME}" + ' --allow-unrelated-histories'
+          sh 'git merge origin/' + "${env.BRANCH_NAME}"
+          sh 'git push origin HEAD:master'
+          echo 'Se ha integrado a la rama master exitosamente'
         }
       }
     }
