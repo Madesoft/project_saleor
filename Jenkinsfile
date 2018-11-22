@@ -64,7 +64,6 @@ pipeline {
           }
           success {
             echo "Las pruebas se han ejecutado correctamente y han sido exitosas"
-            }
           }
         }
       }
